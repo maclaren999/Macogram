@@ -1,10 +1,11 @@
 <resources>
   <!-- Base application theme. -->
-  <style name="AppThemeLight" parent="MaterialDrawerTheme.Light">
+  <style name="AppThemeLight" parent="MaterialDrawerTheme">
       <!-- Customize your theme here. -->
       <item name="colorPrimary">@color/colorPrimary</item>
       <item name="colorPrimaryDark">#183747</item>
-      <item name="colorAccent">@color/colorAccent</item>
+      <item name="colorAccent">#EDFFFFFF</item>
+      <item name="android:colorBackground">@color/md_white_1000</item>
 
       <!-- MaterialDrawer specific values -->
       <item name="material_drawer_background">@color/material_drawer_background</item>
