@@ -1,11 +1,14 @@
-package ua.maclaren99.macogram
+package ua.maclaren99.macogram.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.databinding.ActivityMainBinding
 import ua.maclaren99.macogram.ui.fragments.ChatsFragment
 import ua.maclaren99.macogram.ui.objects.AppDrawer
+import ua.maclaren99.macogram.util.replaceActivity
+import ua.maclaren99.macogram.util.replaceFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,12 +37,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-        mAppDrawer.create()
-        setSupportActionBar(mToolbar)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.dataContainer,
-                ChatsFragment()
-            ).commit()
-
+        if (true) {
+            mAppDrawer.create()
+            setSupportActionBar(mToolbar)
+            replaceFragment(ChatsFragment())
+        } else {
+            replaceActivity(RegisterActivity())
+        }
     }
+
 }

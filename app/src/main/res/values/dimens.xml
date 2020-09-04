@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="horizontal_margin">16dp</dimen>
+    <dimen name="vertical_margin">16dp</dimen>
+    <dimen name="large_horizontal_margin">20dp</dimen>
+    <dimen name="large_vertical_margin">20dp</dimen>
+    <dimen name="small_horizontal_margin">10dp</dimen>
+    <dimen name="small_vertical_margin">10dp</dimen>
+    <dimen name="little_horizontal_margin">5dp</dimen>
+    <dimen name="little_vertical_margin">5dp</dimen>
+    <dimen name="tiny_horizontal_margin">3dp</dimen>
+    <dimen name="tiny_vertical_margin">3dp</dimen>
+    <dimen name="massiveText">26sp</dimen>
+    <dimen name="largeText">20sp</dimen>
+    <dimen name="bigText">18sp</dimen>
+    <dimen name="normalText">16sp</dimen>
+    <dimen name="smallText">14sp</dimen>
+    <dimen name="tinyText">12sp</dimen>
+    <dimen name="huge_horizontal_margin">48dp</dimen>
+    <dimen name="huge_vertical_margin">48dp</dimen>
+
+<!--  Settings fragment  -->
+    <dimen name="settings_user_photo_width">55dp</dimen>
+    <dimen name="settings_user_photo_heigth">55dp</dimen>
+    <dimen name="settings_user_photo_border">1dp</dimen>
+
+<!--  camrea icon  -->
+    <dimen name="settings_icon_change_photo_width">50dp</dimen>
+    <dimen name="settings_icon_change_photo_heigth">50dp</dimen>
+    <dimen name="settings_icon_change_photo_border">2dp</dimen>
+    <dimen name="settings_ripple_effect_radius">4dp</dimen>
+    <dimen name="appPadding">5dp</dimen>
+</resources>

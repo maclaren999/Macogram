@@ -2,4 +2,19 @@
     <string name="app_name">Macogram</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="default_user_name">Валик</string>
+    <string name="settings_default_status">offline</string>
+    <string name="settings_text_account">Account</string>
+    <string name="settings_default_number">+380999999999</string>
+    <string name="settings_tap_to_change_label">Tap to change</string>
+    <string name="settings_default_login">\@chmotozavr</string>
+    <string name="settings_hint_bio">Add a few words about yourself</string>
+    <string name="settings_hint_username">Username</string>
+    <string name="settings_default_bio">Bio</string>
+    <string name="settings_menu_btn_change_name">Change name</string>
+    <string name="settings_menu_log_out">Log out</string>
+    <string name="cd_register_image">register_image</string>
+    <string name="register_enter_code_text">Enter code</string>
+    <string name="register_enter_code_hint_note">Enter code you have recieved</string>
+    <string name="register_toolbar_title">Your phone number</string>
 </resources>
