@@ -1,6 +1,7 @@
 package ua.maclaren99.macogram.ui.objects
 
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.mikepenz.materialdrawer.AccountHeader
@@ -14,6 +15,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.ui.fragments.SettingsFragment
 import ua.maclaren99.macogram.util.replaceFragment
+import kotlin.coroutines.coroutineContext
 
 class AppDrawer(val mainActivity: AppCompatActivity,val toolbar: Toolbar) {
     private lateinit var mDrawer: Drawer

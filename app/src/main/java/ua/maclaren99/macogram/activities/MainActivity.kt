@@ -2,6 +2,7 @@ package ua.maclaren99.macogram.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.databinding.ActivityMainBinding
@@ -37,9 +38,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
+            setSupportActionBar(mToolbar)
         if (true) {
             mAppDrawer.create()
-            setSupportActionBar(mToolbar)
             replaceFragment(ChatsFragment())
         } else {
             replaceActivity(RegisterActivity())

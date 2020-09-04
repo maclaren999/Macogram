@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import ua.maclaren99.macogram.R
 
-open class BaseFragment(layout: Int) : Fragment() {
+open class BaseFragment(layout: Int) : Fragment(layout) {
     override fun onStart() {
         super.onStart()
     }
