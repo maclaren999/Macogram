@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import com.google.firebase.auth.FirebaseAuth
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.databinding.ActivityMainBinding
 import ua.maclaren99.macogram.ui.fragments.ChatsFragment
 import ua.maclaren99.macogram.ui.objects.AppDrawer
+import ua.maclaren99.macogram.util.AUTH
 import ua.maclaren99.macogram.util.replaceActivity
 import ua.maclaren99.macogram.util.replaceFragment
 
@@ -38,8 +40,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
-            setSupportActionBar(mToolbar)
-        if (true) {
+        setSupportActionBar(mToolbar)
+        if (AUTH.currentUser != null) {
             mAppDrawer.create()
             replaceFragment(ChatsFragment())
         } else {
