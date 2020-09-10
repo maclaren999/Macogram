@@ -29,6 +29,7 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
                     if(it.isSuccessful){
                         showToast("Welcome")
                         (activity as RegisterActivity).replaceActivity(MainActivity())
+
                     } else showToast(it.exception?.message.toString())
                 }
             }

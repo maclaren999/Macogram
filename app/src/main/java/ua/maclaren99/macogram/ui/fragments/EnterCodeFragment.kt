@@ -6,12 +6,10 @@ import kotlinx.android.synthetic.main.fragment_enter_code.*
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.activities.MainActivity
 import ua.maclaren99.macogram.activities.RegisterActivity
-import ua.maclaren99.macogram.util.AUTH
-import ua.maclaren99.macogram.util.AppTextWatcher
-import ua.maclaren99.macogram.util.replaceActivity
-import ua.maclaren99.macogram.util.showToast
+import ua.maclaren99.macogram.util.*
 
-class EnterCodeFragment(val mPhoneNumber: String, val id: String) : Fragment(R.layout.fragment_enter_code) {
+class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
+    Fragment(R.layout.fragment_enter_code) {
 
     override fun onStart() {
         super.onStart()
@@ -28,11 +26,24 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) : Fragment(R.l
     private fun verifyCode() {
         val code = register_edit_input_code.text.toString()
         val credential = PhoneAuthProvider.getCredential(id, code)
-        AUTH.signInWithCredential(credential).addOnCompleteListener{
-            if(it.isSuccessful){
-                showToast("Welcome")
-                (activity as RegisterActivity).replaceActivity(MainActivity())
-            } else showToast(it.exception?.message.toString())
+        AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val uid = AUTH.uid.toString()
+                val authDataMap = mutableMapOf<String, Any>(
+                    Pair(CHILD_ID, uid),
+                    Pair(CHILD_PHONE, mPhoneNumber),
+                    Pair(CHILD_USERNAME, uid)
+                )
+                REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(authDataMap)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            showToast("verifyCode - passed")
+                            (activity as RegisterActivity).replaceActivity(MainActivity())
+                        } else showToast(it.exception?.message.toString())
+                    }
+                showToast("verifyCode - passed2")
+
+            } else showToast(task.exception?.message.toString())
         }
     }
 

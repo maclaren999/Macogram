@@ -5,8 +5,8 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.databinding.ActivityRegisterBinding
-import ua.maclaren99.macogram.databinding.FragmentSettingsBinding
 import ua.maclaren99.macogram.ui.fragments.EnterPhoneNumberFragment
+import ua.maclaren99.macogram.util.initFirebase
 import ua.maclaren99.macogram.util.replaceFragment
 
 class RegisterActivity : AppCompatActivity() {
@@ -18,8 +18,7 @@ class RegisterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         mBinding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
-
+        initFirebase()
     }
 
     override fun onStart() {

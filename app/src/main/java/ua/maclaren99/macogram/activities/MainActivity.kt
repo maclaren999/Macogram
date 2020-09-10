@@ -2,28 +2,27 @@ package ua.maclaren99.macogram.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
 import androidx.appcompat.widget.Toolbar
-import com.google.firebase.auth.FirebaseAuth
-import ua.maclaren99.macogram.R
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import ua.maclaren99.macogram.databinding.ActivityMainBinding
+import ua.maclaren99.macogram.models.User
 import ua.maclaren99.macogram.ui.fragments.ChatsFragment
 import ua.maclaren99.macogram.ui.objects.AppDrawer
-import ua.maclaren99.macogram.util.AUTH
-import ua.maclaren99.macogram.util.replaceActivity
-import ua.maclaren99.macogram.util.replaceFragment
+import ua.maclaren99.macogram.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBinding: ActivityMainBinding
     private lateinit var mToolbar: Toolbar
-    private lateinit var mAppDrawer: AppDrawer
+    lateinit var mAppDrawer: AppDrawer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
-
 
     }
 
@@ -36,17 +35,28 @@ class MainActivity : AppCompatActivity() {
     private fun initFields() {
         mToolbar = mBinding.mainToolbar
         mAppDrawer = AppDrawer(this, mToolbar)
-
+        initFirebase()
+        initUser()
     }
 
+
     private fun initFunc() {
-        setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
+            setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            replaceFragment(ChatsFragment())
+            replaceFragment(ChatsFragment(), false)
         } else {
             replaceActivity(RegisterActivity())
         }
     }
 
+    private fun initUser() {
+        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
+            .addListenerForSingleValueEvent(
+                AppValueEventListener {
+                    USER = it.getValue(User::class.java) ?: User()
+
+                }
+            )
+    }
 }

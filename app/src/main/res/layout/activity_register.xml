@@ -14,7 +14,7 @@
         style="@style/mainToolbar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ddataContainer"
+        android:id="@+id/dataContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
 

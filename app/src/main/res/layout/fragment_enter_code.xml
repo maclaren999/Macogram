@@ -43,17 +43,18 @@
     <EditText
         android:id="@+id/register_edit_input_code"
         style="@style/editText"
+        android:layout_width="wrap_content"
         android:layout_marginHorizontal="@dimen/huge_horizontal_margin"
         android:layout_marginTop="@dimen/horizontal_margin"
         android:autofillHints=""
-        android:backgroundTint="@color/colorGrey"
         android:gravity="center"
-        android:hint="_ _ _ _ _ _"
+        android:hint="__  __  __  __  __  __"
+        android:textSize="@dimen/largeText"
+        android:textColorHint="@color/colorGrey"
         android:inputType="phone"
         android:maxLength="6"
         android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/register_enter_code_hint_note_text" />
 

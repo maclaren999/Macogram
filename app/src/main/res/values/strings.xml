@@ -17,4 +17,10 @@
     <string name="register_enter_code_text">Enter code</string>
     <string name="register_enter_code_hint_note">Enter code you have recieved</string>
     <string name="register_toolbar_title">Your phone number</string>
+    <string name="settings_change_name_edit_hint">Name</string>
+    <string name="settings_change_surname_edit_hint">Surname</string>
+    <string name="settings_toast_name_is_empty">Name can\'t be empty.</string>
+    <string name="data_updated">Data updated successfuly!</string>
+    <string name="settings_username_change_edit_hint">Username</string>
+    <string name="empty_username_toast">Username can\'t be empty!</string>
 </resources>

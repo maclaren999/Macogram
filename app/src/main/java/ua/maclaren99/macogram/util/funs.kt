@@ -10,8 +10,8 @@ import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.activities.RegisterActivity
 import ua.maclaren99.macogram.ui.fragments.ChatsFragment
 
-fun Fragment.showToast(message: String){
-    Toast.makeText(this.context, message,Toast.LENGTH_SHORT).show()
+fun Fragment.showToast(message: String) {
+    Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
 }
 
 fun AppCompatActivity.replaceActivity(activity: AppCompatActivity) {
@@ -20,16 +20,24 @@ fun AppCompatActivity.replaceActivity(activity: AppCompatActivity) {
     this.finish()
 }
 
-fun AppCompatActivity.replaceFragment(fragment: Fragment){
-    supportFragmentManager.beginTransaction()
-        .addToBackStack(null)
-        .replace(
-            R.id.dataContainer,
-            fragment
-        ).commit()
+fun AppCompatActivity.replaceFragment(fragment: Fragment, addToStack: Boolean = true) {
+    if (addToStack) {
+        supportFragmentManager.beginTransaction()
+            .addToBackStack(null)
+            .replace(
+                R.id.dataContainer,
+                fragment
+            ).commit()
+    } else {
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.dataContainer,
+                fragment
+            ).commit()
+    }
 }
 
-fun Fragment.replaceFragment(fragment: Fragment){
+fun Fragment.replaceFragment(fragment: Fragment) {
     this.fragmentManager?.beginTransaction()
         ?.addToBackStack(null)
         ?.replace(
