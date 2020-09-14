@@ -9,11 +9,10 @@ import ua.maclaren99.macogram.activities.MainActivity
 import ua.maclaren99.macogram.util.*
 
 
-class ChangeFullnameFragment : BaseFragment(R.layout.fragment_change_fullname) {
+class ChangeFullnameFragment : BaseChangeFragment(R.layout.fragment_change_fullname) {
 
     override fun onResume() {
         super.onResume()
-        setHasOptionsMenu(true)
         val fullNameList = USER.fullname.split(" ".toRegex(), 2)
         if (fullNameList.size > 1) {
             settings_input_name.setText(fullNameList[0])
@@ -21,18 +20,7 @@ class ChangeFullnameFragment : BaseFragment(R.layout.fragment_change_fullname) {
         } else settings_input_name.setText(fullNameList[0])
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as MainActivity).menuInflater.inflate(R.menu.settings_confirm_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.settings_confirm_change -> changeFullname()
-        }
-        return true
-    }
-
-    private fun changeFullname() {
+    override fun change() {
         val name: String = settings_input_name.text.toString()
         val surname: String = settings_input_surname.text.toString()
         if (name.isBlank()) {

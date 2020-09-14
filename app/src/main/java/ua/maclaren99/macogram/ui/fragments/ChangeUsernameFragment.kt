@@ -7,27 +7,17 @@ import ua.maclaren99.macogram.activities.MainActivity
 import ua.maclaren99.macogram.util.*
 import java.util.*
 
-class ChangeUsernameFragment : BaseFragment(R.layout.fragment_change_username) {
+class ChangeUsernameFragment : BaseChangeFragment(R.layout.fragment_change_username) {
 
     lateinit var mNewUsername: String
 
     override fun onResume() {
         super.onResume()
-        setHasOptionsMenu(true)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        (activity as MainActivity).menuInflater.inflate(R.menu.settings_confirm_menu, menu)
-    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.settings_confirm_change -> change()
-        }
-        return true
-    }
 
-    private fun change() {
+    override fun change() {
         mNewUsername = settings_input_username.text.toString().toLowerCase(Locale.getDefault())
         if (mNewUsername.isBlank()) {
             showToast(getString(R.string.empty_username_toast))
@@ -36,7 +26,9 @@ class ChangeUsernameFragment : BaseFragment(R.layout.fragment_change_username) {
                 .addListenerForSingleValueEvent(
                     AppValueEventListener {
                         if (it.hasChild(mNewUsername)) {
-                            showToast("Such username already exists")
+                            showToast("Such username already exists.")
+                        } else if (mNewUsername.contains(' ')) {
+                            showToast("Username can't contain spaces.")
                         } else {
                             changeUsername()
                         }

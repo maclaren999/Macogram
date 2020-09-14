@@ -74,7 +74,7 @@
         android:translationY="-32dp"
         android:translationZ="90dp"
         app:civ_border_color="@color/colorAccent"
-        app:civ_circle_background_color="@color/colorPrimary"
+        app:civ_circle_background_color="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/settings_header_block"
         />

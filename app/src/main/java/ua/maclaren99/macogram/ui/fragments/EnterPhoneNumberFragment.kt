@@ -1,5 +1,6 @@
 package ua.maclaren99.macogram.ui.fragments
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -9,16 +10,14 @@ import kotlinx.android.synthetic.main.fragment_enter_phone_number.*
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.activities.MainActivity
 import ua.maclaren99.macogram.activities.RegisterActivity
-import ua.maclaren99.macogram.util.AUTH
-import ua.maclaren99.macogram.util.replaceActivity
-import ua.maclaren99.macogram.util.replaceFragment
-import ua.maclaren99.macogram.util.showToast
+import ua.maclaren99.macogram.util.*
 import java.util.concurrent.TimeUnit
 
 class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) {
 
     private lateinit var mPhoneNumber: String
     private lateinit var mCallback: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    private val TAG = "Reg:EnterPhoneNumber"
 
     override fun onStart() {
         super.onStart()
@@ -29,6 +28,23 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
                     if(it.isSuccessful){
                         showToast("Welcome")
                         (activity as RegisterActivity).replaceActivity(MainActivity())
+//qwe       Вынести
+                        val uid = AUTH.uid.toString()
+                        val authDataMap = mutableMapOf<String, Any>(
+                            Pair(CHILD_ID, uid),
+                            Pair(CHILD_PHONE, mPhoneNumber),
+                            Pair(CHILD_USERNAME, uid)
+                        )
+                        REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(authDataMap)
+                            .addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    showToast("verifyCode - passed")
+                                    (activity as RegisterActivity).replaceActivity(MainActivity())
+                                } else showToast(it.exception?.message.toString())
+                            }
+                        showToast("verifyCode - passed2")
+//qwe
+
 
                     } else showToast(it.exception?.message.toString())
                 }
@@ -40,6 +56,7 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
 
             override fun onCodeSent(id: String, token: PhoneAuthProvider.ForceResendingToken) {
                 replaceFragment(EnterCodeFragment(mPhoneNumber, id))
+                Log.d(TAG, "onCodeSent()")
             }
         }
         register_btn_next.setOnClickListener { sendCode() }
