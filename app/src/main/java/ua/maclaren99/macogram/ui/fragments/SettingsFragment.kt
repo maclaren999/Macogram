@@ -1,17 +1,19 @@
 package ua.maclaren99.macogram.ui.fragments
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import com.google.firebase.storage.StorageReference
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import ua.maclaren99.macogram.R
-import ua.maclaren99.macogram.activities.MainActivity
 import ua.maclaren99.macogram.activities.RegisterActivity
 import ua.maclaren99.macogram.databinding.FragmentSettingsBinding
-import ua.maclaren99.macogram.util.AUTH
-import ua.maclaren99.macogram.util.USER
-import ua.maclaren99.macogram.util.replaceActivity
-import ua.maclaren99.macogram.util.replaceFragment
+import ua.maclaren99.macogram.util.*
 
 class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
 
@@ -29,9 +31,21 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         settings_username.text = USER.username
         settings_phone_number.text = USER.phone
         settings_bio.text = USER.bio
+        settings_user_photo.downloadAndSetImage(USER.photoUrl)
 
         settings_btn_change_username.setOnClickListener { replaceFragment(ChangeUsernameFragment()) }
+        settings_btn_change_bio.setOnClickListener { replaceFragment(ChangeBioFragment()) }
+        settings_btn_change_photo.setOnClickListener { changeUserPhoto() }
     }
+
+    private fun changeUserPhoto() {
+        CropImage.activity()
+            .setAspectRatio(1, 1)
+            .setRequestedSize(600, 600)
+            .setCropShape(CropImageView.CropShape.OVAL)
+            .start(APP_ACTIVITY, this)
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         activity?.menuInflater?.inflate(R.menu.settings_action_menu, menu)
@@ -41,10 +55,31 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         when (item.itemId) {
             R.id.settings_menu_exit -> {
                 AUTH.signOut()
-                (activity as MainActivity).replaceActivity(RegisterActivity())
+                APP_ACTIVITY.replaceActivity(RegisterActivity())
             }
             R.id.settings_menu_change_name -> replaceFragment(ChangeFullnameFragment())
         }
         return true
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val uri = CropImage.getActivityResult(data).uri     //getting path of croped image
+            val path = REF_STORAGE_ROOT.child(PROFILE_IMAGE_FOLDER).child(UID)
+
+            uploadImageToStorage(uri, path) {
+                getItemUrlFromStoarage(path) {
+                    putUrlToDatabase(it) {
+                        USER.photoUrl = it
+                        settings_user_photo.downloadAndSetImage(it)
+                        showToast(getString(R.string.data_updated))
+                    }
+                }
+            }
+
+        }
+    }
+
+
 }

@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.activities.MainActivity
+import ua.maclaren99.macogram.util.APP_ACTIVITY
 
 open class BaseFragment(layout: Int) : Fragment(layout) {
     override fun onStart() {
         super.onStart()
-        (activity as MainActivity).mAppDrawer.disableDrawer()
+        APP_ACTIVITY.mAppDrawer.disableDrawer()
     }
 
     override fun onStop() {
         super.onStop()
-        (activity as MainActivity).mAppDrawer.enableDrawer()
+        APP_ACTIVITY.mAppDrawer.enableDrawer()
     }
 }

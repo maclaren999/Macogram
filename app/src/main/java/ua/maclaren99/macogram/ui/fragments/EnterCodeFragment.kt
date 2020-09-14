@@ -1,5 +1,6 @@
 package ua.maclaren99.macogram.ui.fragments
 
+import android.util.Log
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.android.synthetic.main.fragment_enter_code.*
@@ -8,8 +9,9 @@ import ua.maclaren99.macogram.activities.MainActivity
 import ua.maclaren99.macogram.activities.RegisterActivity
 import ua.maclaren99.macogram.util.*
 
-class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
-    Fragment(R.layout.fragment_enter_code) {
+class EnterCodeFragment(val mPhoneNumber: String, val id: String) : Fragment(R.layout.fragment_enter_code) {
+
+    private val TAG = "Reg:EnterCodeFragment"
 
     override fun onStart() {
         super.onStart()
@@ -28,6 +30,8 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
         val credential = PhoneAuthProvider.getCredential(id, code)
         AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
+                TODO("Вынести повторяющийся код из EnterPhoneNumber")
+                Log.d(TAG, "verifyCode()")
                 val uid = AUTH.uid.toString()
                 val authDataMap = mutableMapOf<String, Any>(
                     Pair(CHILD_ID, uid),
