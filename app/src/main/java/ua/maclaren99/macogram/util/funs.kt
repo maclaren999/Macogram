@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat.startActivity
@@ -61,9 +62,10 @@ fun hideKeyboard() {
     imm.hideSoftInputFromWindow(APP_ACTIVITY.window.decorView.windowToken, 0)
 }
 
-fun CircleImageView.downloadAndSetImage(url: String){
+fun ImageView.downloadAndSetImage(url: String){
     Picasso.get()
         .load(url)
+        .fit()
         .placeholder(R.drawable.ic_default_user)
         .into(this)
 }

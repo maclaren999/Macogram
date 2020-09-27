@@ -35,14 +35,19 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
                             Pair(CHILD_PHONE, mPhoneNumber),
                             Pair(CHILD_USERNAME, uid)
                         )
-                        REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(authDataMap)
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    showToast("verifyCode - passed")
-                                    (activity as RegisterActivity).replaceActivity(MainActivity())
-                                } else showToast(it.exception?.message.toString())
+
+                        REF_DATABASE_ROOT.child(NODE_PHONES).child(mPhoneNumber).setValue(uid)
+                            .addOnFailureListener { showToast(it.message.toString()) }
+                            .addOnSuccessListener {
+                                REF_DATABASE_ROOT.child(NODE_USERS).child(uid).updateChildren(authDataMap)
+                                    .addOnSuccessListener {
+                                        showToast("verifyCode - passed")
+                                        (activity as RegisterActivity).replaceActivity(MainActivity())
+                                    }
+                                    .addOnFailureListener { showToast(it.message.toString()) }
+
                             }
-                        showToast("verifyCode - passed2")
+                        showToast("by EnterPhone!")
 //qwe
 
 
