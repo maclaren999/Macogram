@@ -32,6 +32,7 @@ class ChangeFullnameFragment : BaseChangeFragment(R.layout.fragment_change_fulln
                     if (it.isSuccessful) {
                         showToast(getString(R.string.data_updated))
                         USER.fullname = fullname
+                        APP_ACTIVITY.mAppDrawer.updateHeader()
                         fragmentManager?.popBackStack()
                     }
                 }
