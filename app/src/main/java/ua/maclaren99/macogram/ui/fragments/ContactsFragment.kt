@@ -22,6 +22,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: FirebaseRecyclerAdapter<CommonModel, ContactsHolder>
     private lateinit var mRefContacts: DatabaseReference
+    private lateinit var mRefUsers: DatabaseReference
 
     override fun onResume() {
         super.onResume()
@@ -42,7 +43,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
             ): ContactsHolder {
                 val view = LayoutInflater.from(parent.context)
                     .inflate(R.layout.contact_item, parent, false)
-                    return ContactsHolder(view)
+                return ContactsHolder(view)
             }
 
             override fun onBindViewHolder(
@@ -50,12 +51,20 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 position: Int,
                 model: CommonModel
             ) {
-                holder.name.text = model.fullname
-                holder.status.text = model.status
-                holder.photo.downloadAndSetImage(model.photoUrl)
+                mRefUsers = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
+                mRefUsers.addValueEventListener(AppValueEventListener {
+                    val contact = it.getCommonModel()
+                    holder.name.text = contact.fullname
+                    holder.status.text = contact.status
+                    holder.photo.downloadAndSetImage(contact.photoUrl)
+
+                })
             }
 
         }
+
+        mRecyclerView.adapter = mAdapter
+        mAdapter.startListening()
     }
 
     class ContactsHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -69,3 +78,4 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
         mAdapter.stopListening()
     }
 }
+
