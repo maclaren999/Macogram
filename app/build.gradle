@@ -63,4 +63,7 @@ dependencies {
 
     // Add for NavController support
     implementation "com.mikepenz:materialdrawer-nav:7.0.0"
+
+    // FirebaseUI for Firebase Realtime Database
+    implementation 'com.firebaseui:firebase-ui-database:6.3.0'
 }

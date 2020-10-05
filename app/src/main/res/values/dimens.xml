@@ -29,5 +29,7 @@
     <dimen name="settings_icon_change_photo_width">50dp</dimen>
     <dimen name="settings_icon_change_photo_heigth">50dp</dimen>
     <dimen name="settings_icon_change_photo_border">2dp</dimen>
+
     <dimen name="settings_ripple_effect_radius">4dp</dimen>
+    <dimen name="small_user_photo_size">35dp</dimen>
 </resources>

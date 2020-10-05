@@ -9,6 +9,7 @@
     <EditText
         android:id="@+id/register_edit_input_phone_number"
         style="@style/editText"
+        android:text="+16505553434"
         android:layout_marginHorizontal="@dimen/huge_horizontal_margin"
         android:layout_marginTop="100dp"
         android:autofillHints="Введите свой номер телефона"
