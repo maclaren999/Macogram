@@ -89,7 +89,7 @@
 
         <TextView
             android:id="@+id/settings_text_account"
-            style="@style/settingsLabelText"
+            style="@style/settingsAccentLabelText"
             android:text="@string/settings_text_account"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

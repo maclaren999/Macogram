@@ -46,6 +46,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/normalText</item>
         <item name="android:textColor">@color/colorBlack</item>
+        <item name="android:paddingStart">16dp</item>
     </style>
 
     <style name="settingsLabelLayout">
@@ -54,7 +55,7 @@
         <item name="android:background">@color/colorAccent</item>
     </style>
 
-    <style name="settingsLabelText">
+    <style name="settingsAccentLabelText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">@dimen/vertical_margin</item>
@@ -80,6 +81,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/tinyText</item>
         <item name="android:textColor">@color/colorGrey</item>
+        <item name="android:paddingStart">16dp</item>
     </style>
 
     <style name="dividerPaleGray">

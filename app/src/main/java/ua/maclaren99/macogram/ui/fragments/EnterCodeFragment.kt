@@ -32,8 +32,8 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
         val credential = PhoneAuthProvider.getCredential(id, code)
         AUTH.signInWithCredential(credential).addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                TODO("Вынести повторяющийся код из EnterPhoneNumber")
-                Log.d(TAG, "verifyCode()")
+                /**Вынести повторяющийся код из EnterPhoneNumber*/
+                Log.d(TAG, "EnterCodeFragment - verifyCode()")
                 val uid = AUTH.uid.toString()
                 val authDataMap = mutableMapOf<String, Any>(
                     Pair(CHILD_ID, uid),
@@ -51,7 +51,7 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
                             .addOnFailureListener { showToast(it.message.toString()) }
 
                     }
-                showToast("by EnterCode!!")
+                showToast("EnterCodeFragment - verifyCode()")
 
             } else showToast(task.exception?.message.toString())
         }
