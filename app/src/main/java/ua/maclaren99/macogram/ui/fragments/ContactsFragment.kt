@@ -1,7 +1,5 @@
 package ua.maclaren99.macogram.ui.fragments
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +20,9 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mAdapter: FirebaseRecyclerAdapter<CommonModel, ContactsHolder>
     private lateinit var mRefContacts: DatabaseReference
-    private lateinit var mRefUsers: DatabaseReference
+    private lateinit var mRefContactUser: DatabaseReference
+    private lateinit var mRefUserListener: AppValueEventListener
+    private var mapListeners = hashMapOf<DatabaseReference, AppValueEventListener>()
 
     override fun onResume() {
         super.onResume()
@@ -51,14 +51,18 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 position: Int,
                 model: CommonModel
             ) {
-                mRefUsers = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
-                mRefUsers.addValueEventListener(AppValueEventListener {
+                mRefContactUser = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
+
+                mRefUserListener = AppValueEventListener {
                     val contact = it.getCommonModel()
                     holder.name.text = contact.fullname
                     holder.status.text = contact.status
                     holder.photo.downloadAndSetImage(contact.photoUrl)
 
-                })
+                }
+
+                mRefContactUser.addValueEventListener(mRefUserListener)
+                mapListeners[mRefContactUser] = mRefUserListener
             }
 
         }
@@ -76,6 +80,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
     override fun onPause() {
         super.onPause()
         mAdapter.stopListening()
+        mapListeners.forEach { it.key.removeEventListener(it.value) }
     }
 }
 
