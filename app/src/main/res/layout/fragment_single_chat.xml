@@ -34,9 +34,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/chat_edit_message_hint"
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:textColorHint="@color/colorPaleGrey"
             android:textSize="@dimen/normalText"
+            android:textColor="@color/colorBlack"
+            android:paddingStart="@dimen/horizontal_margin"
+            android:paddingEnd="@dimen/little_horizontal_margin"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/chat_ic_send"
@@ -52,8 +55,7 @@
 
             android:src="@drawable/ic_send"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

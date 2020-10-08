@@ -7,7 +7,7 @@
     android:background="@color/colorPrimary">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/chat_bar_photo"
+        android:id="@+id/chat_toolbar_photo"
         android:layout_width="45dp"
         android:layout_height="45dp"
 
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/chat_bar_name"
+        android:id="@+id/chat_toolbar_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/horizontal_margin"
@@ -29,12 +29,12 @@
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/normalText"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/chat_bar_photo"
-        app:layout_constraintTop_toTopOf="@id/chat_bar_photo"
+        app:layout_constraintStart_toEndOf="@+id/chat_toolbar_photo"
+        app:layout_constraintTop_toTopOf="@id/chat_toolbar_photo"
         tools:text="@string/default_user_name" />
 
     <TextView
-        android:id="@+id/chat_bar_status"
+        android:id="@+id/chat_toolbar_status"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/horizontal_margin"
@@ -42,8 +42,8 @@
 
         android:textColor="@color/colorAccentDark"
         android:textSize="@dimen/tinyText"
-        app:layout_constraintStart_toEndOf="@+id/chat_bar_photo"
-        app:layout_constraintTop_toBottomOf="@id/chat_bar_name"
+        app:layout_constraintStart_toEndOf="@+id/chat_toolbar_photo"
+        app:layout_constraintTop_toBottomOf="@id/chat_toolbar_name"
         tools:text="@string/settings_default_status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

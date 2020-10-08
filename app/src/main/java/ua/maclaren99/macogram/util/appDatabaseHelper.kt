@@ -1,26 +1,21 @@
 package ua.maclaren99.macogram.util
 
-import android.app.Activity
 import android.net.Uri
 import android.provider.ContactsContract
-import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import ua.maclaren99.macogram.activities.MainActivity
-import ua.maclaren99.macogram.activities.RegisterActivity
 import ua.maclaren99.macogram.models.CommonModel
-import ua.maclaren99.macogram.models.User
-import ua.maclaren99.macogram.ui.fragments.EnterPhoneNumberFragment
+import ua.maclaren99.macogram.models.UserModel
 
 lateinit var AUTH: FirebaseAuth
 lateinit var UID: String
 lateinit var REF_DATABASE_ROOT: DatabaseReference
 lateinit var REF_STORAGE_ROOT: StorageReference
-lateinit var USER: User
+lateinit var USER: UserModel
 
 const val NODE_USERS = "users"
 const val NODE_USERNAMES = "usernames"
@@ -42,7 +37,7 @@ fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
     REF_DATABASE_ROOT = FirebaseDatabase.getInstance().reference
     REF_STORAGE_ROOT = FirebaseStorage.getInstance().reference
-    USER = User()
+    USER = UserModel()
     UID = AUTH.currentUser?.uid.toString()
 }
 
@@ -76,17 +71,17 @@ inline fun initUser(crossinline function: () -> Unit) {
     REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
         .addListenerForSingleValueEvent(
             AppValueEventListener {
-                USER = it.getValue(User::class.java) ?: User()
+                USER = it.getValue(UserModel::class.java) ?: UserModel()
                 if (USER.username.isEmpty()) USER.username = UID
                 function()
             }
         )
 }
 
-/** Reads contacts from phone book and put them in [arrayContacts]*/
+/** Reads contacts from phone book and put them in arrayContacts*/
 fun initContacts() {
     if (checkPermissions(READ_CONTACTS)) {
-        var arrayContacts = arrayListOf<CommonModel>()
+        val arrayContacts = arrayListOf<CommonModel>()
         val cursor = APP_ACTIVITY.contentResolver.query(
             ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
             null,
@@ -130,3 +125,6 @@ fun findContactsInDatabase(arrayContacts: ArrayList<CommonModel>) {
 
 fun DataSnapshot.getCommonModel(): CommonModel =
     this.getValue(CommonModel::class.java) ?: CommonModel()
+
+fun DataSnapshot.getuserModel(): UserModel =
+    this.getValue(UserModel::class.java) ?: UserModel()
