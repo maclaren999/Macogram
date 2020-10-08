@@ -25,4 +25,6 @@
     <string name="empty_username_toast">Username can\'t be empty!</string>
     <string name="settings_change_bio_edit_hint">Write something about yourself...</string>
     <string name="contacts_fragment_title">Contacts</string>
+    <string name="chat_edit_message_hint">Message</string>
+    <string name="description_icon_on_send_message_button">Icon on send message button</string>
 </resources>

@@ -9,7 +9,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.contact_item.view.*
+import kotlinx.android.synthetic.main.item_contact.view.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.models.CommonModel
@@ -42,7 +42,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 viewType: Int
             ): ContactsHolder {
                 val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.contact_item, parent, false)
+                    .inflate(R.layout.item_contact, parent, false)
                 return ContactsHolder(view)
             }
 
@@ -58,7 +58,7 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                     holder.name.text = contact.fullname
                     holder.status.text = contact.status
                     holder.photo.downloadAndSetImage(contact.photoUrl)
-
+                    holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment(contact)) }
                 }
 
                 mRefContactUser.addValueEventListener(mRefUserListener)
