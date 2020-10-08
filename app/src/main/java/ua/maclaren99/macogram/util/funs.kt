@@ -7,14 +7,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
-import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.fragment_settings.*
 import ua.maclaren99.macogram.R
-import ua.maclaren99.macogram.activities.RegisterActivity
-import ua.maclaren99.macogram.ui.fragments.ChatsFragment
 
 fun Fragment.showToast(message: String) {
     Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
@@ -35,13 +30,13 @@ fun AppCompatActivity.replaceFragment(fragment: Fragment, addToStack: Boolean = 
         supportFragmentManager.beginTransaction()
             .addToBackStack(null)
             .replace(
-                R.id.dataContainer,
+                R.id.data_container,
                 fragment
             ).commit()
     } else {
         supportFragmentManager.beginTransaction()
             .replace(
-                R.id.dataContainer,
+                R.id.data_container,
                 fragment
             ).commit()
     }
@@ -51,7 +46,7 @@ fun Fragment.replaceFragment(fragment: Fragment) {
     this.fragmentManager?.beginTransaction()
         ?.addToBackStack(null)
         ?.replace(
-            R.id.dataContainer,
+            R.id.data_container,
             fragment
         )?.commit()
 }
