@@ -9,7 +9,8 @@ import ua.maclaren99.macogram.models.CommonModel
 import ua.maclaren99.macogram.models.UserModel
 import ua.maclaren99.macogram.util.*
 
-class SingleChatFragment (private val contact: CommonModel) : BaseFragment(R.layout.fragment_single_chat) {
+class SingleChatFragment(private val contact: CommonModel) :
+    BaseFragment(R.layout.fragment_single_chat) {
 
     private lateinit var mChatToolbar: View
     private lateinit var mReceivingUser: UserModel
@@ -33,8 +34,11 @@ class SingleChatFragment (private val contact: CommonModel) : BaseFragment(R.lay
     }
 
     private fun updateToolbar() {
-        mChatToolbar.chat_toolbar_name.setText(mReceivingUser.fullname)
-        mChatToolbar.chat_toolbar_status.setText(mReceivingUser.status)
+        if (mReceivingUser.fullname.isEmpty()) {
+            mChatToolbar.chat_toolbar_name.text = contact.fullname
+        } else mChatToolbar.chat_toolbar_name.text = mReceivingUser.fullname
+
+        mChatToolbar.chat_toolbar_status.text = mReceivingUser.status
         mChatToolbar.chat_toolbar_photo.downloadAndSetImage(mReceivingUser.photoUrl)
     }
 

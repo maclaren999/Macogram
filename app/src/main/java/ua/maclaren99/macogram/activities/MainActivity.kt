@@ -60,8 +60,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        AppStatus.updateStatus(AppStatus.OFFLINE)
-
+        AppStatus.updateStatus(AppStatus.SEEN_RECANTLY)
     }
 
 

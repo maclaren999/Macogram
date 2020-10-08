@@ -3,6 +3,7 @@ package ua.maclaren99.macogram.util
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.provider.ContactsContract
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
 import ua.maclaren99.macogram.R
+import ua.maclaren99.macogram.models.CommonModel
 
 fun Fragment.showToast(message: String) {
     Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
@@ -49,6 +51,35 @@ fun Fragment.replaceFragment(fragment: Fragment) {
             R.id.data_container,
             fragment
         )?.commit()
+}
+
+/** Reads contacts from phone book and put them in arrayContacts*/
+fun initContacts() {
+    if (checkPermissions(READ_CONTACTS)) {
+        val arrayContacts = arrayListOf<CommonModel>()
+        val cursor = APP_ACTIVITY.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
+        cursor?.let {
+            while (it.moveToNext()) {
+                val fullname =
+                    it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val phone =
+                    it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val newModel = CommonModel()
+                newModel.fullname = fullname
+                newModel.phone = phone.replace(" ", "").replace("-", "")
+                arrayContacts.add(newModel)
+            }
+        }
+
+        cursor?.close()
+        findContactsInDatabase(arrayContacts)
+    }
 }
 
 fun hideKeyboard() {
