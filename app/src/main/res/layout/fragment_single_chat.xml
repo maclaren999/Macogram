@@ -30,7 +30,7 @@
         >
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/chat_edit_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="@string/chat_edit_message_hint"
@@ -44,7 +44,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/chat_ic_send"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:importantForAutofill="no" />
 
         <ImageView
             android:id="@+id/chat_ic_send"
@@ -54,6 +55,17 @@
             android:padding="@dimen/small_horizontal_margin"
 
             android:src="@drawable/ic_send"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/chat_ic_send_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/description_icon_on_send_message_button"
+            android:padding="@dimen/small_horizontal_margin"
+            android:visibility="visible"
+            android:src="@drawable/ic_send_gray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

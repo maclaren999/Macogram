@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ServerValue
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import ua.maclaren99.macogram.models.CommonModel
@@ -17,7 +18,10 @@ lateinit var REF_DATABASE_ROOT: DatabaseReference
 lateinit var REF_STORAGE_ROOT: StorageReference
 lateinit var USER: UserModel
 
+const val TYPE_TEXT = "text"
+
 const val NODE_USERS = "users"
+const val NODE_MESSAGES = "messages"
 const val NODE_USERNAMES = "usernames"
 const val NODE_PHONES = "phones"
 const val NODE_PHONE_CONTACTS = "phone_contacts"
@@ -32,6 +36,11 @@ const val CHILD_FULLNAME = "fullname"
 const val CHILD_BIO = "bio"
 const val CHILD_PHOTO_URL = "photoUrl"
 const val CHILD_STATUS = "status"
+const val CHILD_TEXT = "text"
+const val CHILD_FROM = "from"
+const val CHILD_TYPE = "type"
+const val CHILD_TIMESTAMP = "timeStamp"
+
 
 fun initFirebase() {
     AUTH = FirebaseAuth.getInstance()
@@ -109,3 +118,23 @@ fun DataSnapshot.getCommonModel(): CommonModel =
 
 fun DataSnapshot.getuserModel(): UserModel =
     this.getValue(UserModel::class.java) ?: UserModel()
+
+fun sendMessage(message: String, receivingUserID: String, typeText: String, onSendedFunction: () -> Unit) {
+
+    var refDialogUser = "$NODE_MESSAGES/$UID/$receivingUserID"
+    var refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserID/$UID"
+    var messageKey = REF_DATABASE_ROOT.child(refDialogUser).push().key
+
+    val messageMap = hashMapOf<String, Any>()
+    messageMap[CHILD_FROM] = UID
+    messageMap[CHILD_TEXT] = message
+    messageMap[CHILD_TYPE] = typeText
+    messageMap[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
+
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = messageMap
+    mapDialog["$refDialogReceivingUser/$messageKey"] = messageMap
+    REF_DATABASE_ROOT.updateChildren(mapDialog)
+        .addOnSuccessListener { onSendedFunction() }
+        .addOnFailureListener { APP_ACTIVITY.showToast(it.message.toString()) }
+}
