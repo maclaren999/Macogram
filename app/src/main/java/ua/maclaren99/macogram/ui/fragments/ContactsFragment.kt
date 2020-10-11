@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.item_contact.view.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.models.CommonModel
+import ua.maclaren99.macogram.ui.fragments.single_chat.SingleChatFragment
 import ua.maclaren99.macogram.util.*
 
 class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
@@ -61,7 +62,11 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
 
                     holder.status.text = contact.status
                     holder.photo.downloadAndSetImage(contact.photoUrl)
-                    holder.itemView.setOnClickListener { replaceFragment(SingleChatFragment(model)) }
+                    holder.itemView.setOnClickListener { replaceFragment(
+                        SingleChatFragment(
+                            model
+                        )
+                    ) }
                 }
 
                 mRefContactUser.addValueEventListener(mRefUserListener)

@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import com.squareup.picasso.Picasso
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.models.CommonModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun Fragment.showToast(message: String) {
     Toast.makeText(this.context, message, Toast.LENGTH_SHORT).show()
@@ -94,4 +96,10 @@ fun ImageView.downloadAndSetImage(url: String){
         .fit()
         .placeholder(R.drawable.ic_default_user)
         .into(this)
+}
+
+fun String.toTime(): String {
+    val time = Date(this.toLong())
+    val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return timeFormat.format(time)
 }

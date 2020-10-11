@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.SingleChatFragment">
+    tools:context=".ui.fragments.single_chat.SingleChatFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/chat_recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         tools:listitem="@layout/item_message"
         android:background="@color/colorBlueWish"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
 
         app:layout_constraintBottom_toTopOf="@+id/edit_message_layout"
         app:layout_constraintEnd_toEndOf="parent"
@@ -48,17 +49,6 @@
             android:importantForAutofill="no" />
 
         <ImageView
-            android:id="@+id/chat_ic_send"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:contentDescription="@string/description_icon_on_send_message_button"
-            android:padding="@dimen/small_horizontal_margin"
-
-            android:src="@drawable/ic_send"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <ImageView
             android:id="@+id/chat_ic_send_gray"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -66,6 +56,18 @@
             android:padding="@dimen/small_horizontal_margin"
             android:visibility="visible"
             android:src="@drawable/ic_send_gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/chat_ic_send"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/description_icon_on_send_message_button"
+            android:padding="@dimen/small_horizontal_margin"
+            android:visibility="gone"
+
+            android:src="@drawable/ic_send"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

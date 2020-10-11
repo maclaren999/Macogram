@@ -27,4 +27,5 @@
     <string name="contacts_fragment_title">Contacts</string>
     <string name="chat_edit_message_hint">Message</string>
     <string name="description_icon_on_send_message_button">Icon on send message button</string>
+    <string name="enter_phone_notig_text">Enter your phone number in full format, plz.\n Like +380993334444.</string>
 </resources>
