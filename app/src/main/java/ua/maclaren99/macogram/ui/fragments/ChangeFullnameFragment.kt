@@ -1,11 +1,8 @@
 package ua.maclaren99.macogram.ui.fragments
 
-import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_change_fullname.*
 import ua.maclaren99.macogram.R
-import ua.maclaren99.macogram.activities.MainActivity
+import ua.maclaren99.macogram.database.*
 import ua.maclaren99.macogram.util.*
 
 
@@ -27,16 +24,12 @@ class ChangeFullnameFragment : BaseChangeFragment(R.layout.fragment_change_fulln
             showToast(getString(R.string.settings_toast_name_is_empty))
         } else {
             val fullname = "$name $surname"
-            REF_DATABASE_ROOT.child(NODE_USERS).child(UID).child(CHILD_FULLNAME)
-                .setValue(fullname).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        showToast(getString(R.string.data_updated))
-                        USER.fullname = fullname
-                        APP_ACTIVITY.mAppDrawer.updateHeader()
-                        fragmentManager?.popBackStack()
-                    }
-                }
+            setFullname(fullname)
+
+
         }
     }
+
+
 
 }

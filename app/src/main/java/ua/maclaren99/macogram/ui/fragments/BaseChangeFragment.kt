@@ -1,10 +1,8 @@
 package ua.maclaren99.macogram.ui.fragments
 
-import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import ua.maclaren99.macogram.R
-import ua.maclaren99.macogram.activities.MainActivity
 import ua.maclaren99.macogram.util.APP_ACTIVITY
 import ua.maclaren99.macogram.util.hideKeyboard
 

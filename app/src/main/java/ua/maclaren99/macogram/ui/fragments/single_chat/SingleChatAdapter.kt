@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_message.view.*
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.models.CommonModel
-import ua.maclaren99.macogram.util.UID
+import ua.maclaren99.macogram.database.UID
 import ua.maclaren99.macogram.util.toTime
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatViewHolder>() {
 

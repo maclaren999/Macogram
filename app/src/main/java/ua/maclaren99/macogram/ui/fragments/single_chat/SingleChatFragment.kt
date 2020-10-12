@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_chat.view.*
 import ua.maclaren99.macogram.R
+import ua.maclaren99.macogram.database.*
 import ua.maclaren99.macogram.models.CommonModel
 import ua.maclaren99.macogram.models.UserModel
 import ua.maclaren99.macogram.ui.fragments.BaseFragment
@@ -38,7 +39,9 @@ class SingleChatFragment(private val contact: CommonModel) :
     private fun initRecyclerView() {
         mRecyclerView = chat_recycler_view
         mAdapter = SingleChatAdapter()
-        mRefUserMessages = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(UID).child(contact.id)
+        mRefUserMessages = REF_DATABASE_ROOT.child(
+            NODE_MESSAGES
+        ).child(UID).child(contact.id)
         mRecyclerView.adapter = mAdapter
         mMessagesListener = AppValueEventListener { dataSnapshot ->
             mListMessages = dataSnapshot.children.map { it.getCommonModel() }
@@ -60,14 +63,20 @@ class SingleChatFragment(private val contact: CommonModel) :
             updateToolbar()
         }
         //Define Contact User Database Reference, set listener
-        mRefReceivingUser = REF_DATABASE_ROOT.child(NODE_USERS).child(contact.id)
+        mRefReceivingUser = REF_DATABASE_ROOT.child(
+            NODE_USERS
+        ).child(contact.id)
         mRefReceivingUser.addValueEventListener(mListenerChatToolbar)
     }
 
     private fun initSendButtonListener() {
         chat_ic_send.setOnClickListener {
             val message = chat_edit_message.text.toString()
-            sendMessage(message, contact.id, TYPE_TEXT) {
+            sendMessage(
+                message,
+                contact.id,
+                TYPE_TEXT
+            ) {
                 chat_edit_message.setText("")
             }
         }

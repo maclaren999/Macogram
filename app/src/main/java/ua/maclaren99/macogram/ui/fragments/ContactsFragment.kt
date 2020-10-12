@@ -12,6 +12,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.item_contact.view.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import ua.maclaren99.macogram.R
+import ua.maclaren99.macogram.database.*
 import ua.maclaren99.macogram.models.CommonModel
 import ua.maclaren99.macogram.ui.fragments.single_chat.SingleChatFragment
 import ua.maclaren99.macogram.util.*
@@ -33,7 +34,9 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
 
     private fun initRecyclerView() {
         mRecyclerView = contacts_recycler_view
-        mRefContacts = REF_DATABASE_ROOT.child(NODE_PHONE_CONTACTS).child(UID)
+        mRefContacts = REF_DATABASE_ROOT.child(
+            NODE_PHONE_CONTACTS
+        ).child(UID)
 
         val options = FirebaseRecyclerOptions.Builder<CommonModel>()
             .setQuery(mRefContacts, CommonModel::class.java).build()
@@ -52,7 +55,9 @@ class ContactsFragment : BaseFragment(R.layout.fragment_contacts) {
                 position: Int,
                 model: CommonModel
             ) {
-                mRefContactUser = REF_DATABASE_ROOT.child(NODE_USERS).child(model.id)
+                mRefContactUser = REF_DATABASE_ROOT.child(
+                    NODE_USERS
+                ).child(model.id)
 
                 mRefUserListener = AppValueEventListener {
                     val contact = it.getCommonModel()

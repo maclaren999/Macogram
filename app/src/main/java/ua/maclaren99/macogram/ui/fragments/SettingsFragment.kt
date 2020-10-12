@@ -2,16 +2,14 @@ package ua.maclaren99.macogram.ui.fragments
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import com.google.firebase.storage.StorageReference
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_settings.*
 import ua.maclaren99.macogram.R
-import ua.maclaren99.macogram.activities.RegisterActivity
+import ua.maclaren99.macogram.database.*
 import ua.maclaren99.macogram.databinding.FragmentSettingsBinding
 import ua.maclaren99.macogram.util.*
 
@@ -56,7 +54,7 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
             R.id.settings_menu_exit -> {
                 AppStatus.updateStatus(AppStatus.OFFLINE)
                 AUTH.signOut()
-                APP_ACTIVITY.replaceActivity(RegisterActivity())
+                restartActivity()
             }
             R.id.settings_menu_change_name -> replaceFragment(ChangeFullnameFragment())
         }
@@ -67,7 +65,9 @@ class SettingsFragment : BaseFragment(R.layout.fragment_settings) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             val uri = CropImage.getActivityResult(data).uri     //getting path of croped image
-            val path = REF_STORAGE_ROOT.child(PROFILE_IMAGE_FOLDER).child(UID)
+            val path = REF_STORAGE_ROOT.child(
+                PROFILE_IMAGE_FOLDER
+            ).child(UID)
 
             uploadImageToStorage(uri, path) {
                 getItemUrlFromStoarage(path) {

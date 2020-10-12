@@ -2,6 +2,7 @@ package ua.maclaren99.macogram.ui.objects
 
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.drawerlayout.widget.DrawerLayout
@@ -19,10 +20,9 @@ import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.ui.fragments.ContactsFragment
 import ua.maclaren99.macogram.ui.fragments.SettingsFragment
 import ua.maclaren99.macogram.util.APP_ACTIVITY
-import ua.maclaren99.macogram.util.USER
+import ua.maclaren99.macogram.database.USER
 import ua.maclaren99.macogram.util.downloadAndSetImage
 import ua.maclaren99.macogram.util.replaceFragment
-import kotlin.coroutines.coroutineContext
 
 
 class AppDrawer {
@@ -32,6 +32,7 @@ class AppDrawer {
     private lateinit var mCurrentProfile: ProfileDrawerItem
 
     fun create() {
+        Thread.sleep(2000)
         initLoader()
         createHeader()
         createDrawer()
@@ -134,12 +135,13 @@ class AppDrawer {
 
    private fun goToFragment(position: Int) {
         when (position) {
-            7 -> APP_ACTIVITY.replaceFragment(SettingsFragment())
-            4 -> APP_ACTIVITY.replaceFragment(ContactsFragment())
+            7 -> replaceFragment(SettingsFragment())
+            4 -> replaceFragment(ContactsFragment())
         }
     }
 
     private fun createHeader() {
+        Log.d("DBHelper", "createHeader()")
         mCurrentProfile = ProfileDrawerItem()
             .withName(USER.fullname)
             .withEmail(USER.phone)

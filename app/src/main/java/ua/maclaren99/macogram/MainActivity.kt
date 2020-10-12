@@ -1,4 +1,4 @@
-package ua.maclaren99.macogram.activities
+package ua.maclaren99.macogram
 
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -9,8 +9,12 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import ua.maclaren99.macogram.database.AUTH
+import ua.maclaren99.macogram.database.initFirebase
+import ua.maclaren99.macogram.database.initUser
 import ua.maclaren99.macogram.databinding.ActivityMainBinding
-import ua.maclaren99.macogram.ui.fragments.ChatsFragment
+import ua.maclaren99.macogram.ui.fragments.MainFragment
+import ua.maclaren99.macogram.ui.fragments.register.EnterPhoneNumberFragment
 import ua.maclaren99.macogram.ui.objects.AppDrawer
 import ua.maclaren99.macogram.util.*
 
@@ -28,11 +32,11 @@ class MainActivity : AppCompatActivity() {
         APP_ACTIVITY = this
         initFirebase()
         initUser {
-            initFields()
-            initFunc()
             CoroutineScope(Dispatchers.IO).launch {
                 initContacts()
             }
+            initFields()
+            initFunc()
         }
     }
 
@@ -43,13 +47,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initFunc() {
+        setSupportActionBar(mToolbar)
         if (AUTH.currentUser != null) {
             Log.d(TAG, AUTH.currentUser!!.uid.toString())
-            setSupportActionBar(mToolbar)
             mAppDrawer.create()
-            replaceFragment(ChatsFragment(), false)
+            replaceFragment(MainFragment(), false)
         } else {
-            replaceActivity(RegisterActivity())
+            replaceFragment(EnterPhoneNumberFragment())
         }
     }
 
