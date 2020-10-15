@@ -4,18 +4,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_message.view.*
 import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.models.CommonModel
 import ua.maclaren99.macogram.database.UID
+import ua.maclaren99.macogram.util.DiffUtilCallback
 import ua.maclaren99.macogram.util.toTime
 
 class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatViewHolder>() {
 
     val TAG : String = "SingleCF"
 
-    var mListMessagesCache = emptyList<CommonModel>()
+    private lateinit var mDiffResult: DiffUtil.DiffResult
+    var mListMessagesCache = mutableListOf<CommonModel>()
 
     class SingleChatViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val userMessageLayout = view.user_message_layout
@@ -50,9 +53,21 @@ class SingleChatAdapter : RecyclerView.Adapter<SingleChatAdapter.SingleChatViewH
         }
     }
 
-    fun setList(listOfCommonModels: List<CommonModel>) {
-        mListMessagesCache = listOfCommonModels
-        notifyDataSetChanged()
+//    fun setList(listOfCommonModels: List<CommonModel>) {
+//        mDiffResult = DiffUtil.calculateDiff(DiffUtilCallback(mListMessagesCache, listOfCommonModels))
+//        mDiffResult.dispatchUpdatesTo(this)
+//        mListMessagesCache = listOfCommonModels
+//        //notifyDataSetChanged()
+//    }
+
+
+    fun addItem(item: CommonModel){
+        val newList = mutableListOf<CommonModel>()
+        newList.addAll(mListMessagesCache)
+        newList.add(item)
+        mDiffResult = DiffUtil.calculateDiff(DiffUtilCallback(mListMessagesCache, newList))
+        mDiffResult.dispatchUpdatesTo(this)
+        mListMessagesCache = newList
     }
 }
 
