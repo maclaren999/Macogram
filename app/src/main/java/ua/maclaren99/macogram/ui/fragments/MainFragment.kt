@@ -5,6 +5,7 @@ import ua.maclaren99.macogram.R
 import ua.maclaren99.macogram.databinding.FragmentChatsBinding
 import ua.maclaren99.macogram.ui.objects.AppDrawer
 import ua.maclaren99.macogram.util.APP_ACTIVITY
+import ua.maclaren99.macogram.util.hideKeyboard
 
 class MainFragment : Fragment(R.layout.fragment_chats) {
 
@@ -14,5 +15,6 @@ class MainFragment : Fragment(R.layout.fragment_chats) {
         super.onResume()
         APP_ACTIVITY.title = "Macogram"
         APP_ACTIVITY.mAppDrawer.enableDrawer()
+        hideKeyboard()
     }
 }

@@ -3,6 +3,9 @@ package ua.maclaren99.macogram.ui.fragments.single_chat
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_single_chat.*
@@ -23,9 +26,9 @@ class SingleChatFragment(private val contact: CommonModel) :
     private lateinit var mRefReceivingUser: DatabaseReference
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mRefUserMessages: DatabaseReference
-    private lateinit var mMessagesListener: AppValueEventListener
+    private lateinit var mMessagesListener: ChildEventListener
     private lateinit var mAdapter: SingleChatAdapter
-    private lateinit var mListMessages: List<CommonModel>
+    private var mListMessages = mutableListOf<CommonModel>()
 
     private var mSendMessageIconVisibility: Boolean = false
 
@@ -39,16 +42,17 @@ class SingleChatFragment(private val contact: CommonModel) :
     private fun initRecyclerView() {
         mRecyclerView = chat_recycler_view
         mAdapter = SingleChatAdapter()
-        mRefUserMessages = REF_DATABASE_ROOT.child(
-            NODE_MESSAGES
-        ).child(UID).child(contact.id)
+        mRefUserMessages = REF_DATABASE_ROOT
+            .child(NODE_MESSAGES).child(UID).child(contact.id)
         mRecyclerView.adapter = mAdapter
-        mMessagesListener = AppValueEventListener { dataSnapshot ->
-            mListMessages = dataSnapshot.children.map { it.getCommonModel() }
-            mAdapter.setList(mListMessages)
+
+        mMessagesListener = AppChildEventListener {
+            mAdapter.addItem(it.getCommonModel())
             mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
+
         }
-        mRefUserMessages.addValueEventListener(mMessagesListener)
+
+        mRefUserMessages.addChildEventListener(mMessagesListener)
     }
 
 
