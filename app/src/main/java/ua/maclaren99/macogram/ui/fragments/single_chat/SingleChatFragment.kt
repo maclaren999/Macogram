@@ -1,6 +1,7 @@
 package ua.maclaren99.macogram.ui.fragments.single_chat
 
 import android.view.View
+import android.widget.AbsListView
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.ChildEventListener
@@ -26,9 +27,14 @@ class SingleChatFragment(private val contact: CommonModel) :
     private lateinit var mRefReceivingUser: DatabaseReference
     private lateinit var mRecyclerView: RecyclerView
     private lateinit var mRefUserMessages: DatabaseReference
-    private lateinit var mMessagesListener: ChildEventListener
+    private lateinit var mMessagesListener: AppChildEventListener
     private lateinit var mAdapter: SingleChatAdapter
+    private var mCountMessages = 10
+    private var mIsScrolling: Boolean = false
+    private var mSmoothScrollToPosition = true
+    private var mListListeners = mutableListOf<AppChildEventListener>()
     private var mListMessages = mutableListOf<CommonModel>()
+
 
     private var mSendMessageIconVisibility: Boolean = false
 
@@ -48,11 +54,35 @@ class SingleChatFragment(private val contact: CommonModel) :
 
         mMessagesListener = AppChildEventListener {
             mAdapter.addItem(it.getCommonModel())
-            mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
-
+            if (mSmoothScrollToPosition) mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
         }
 
-        mRefUserMessages.addChildEventListener(mMessagesListener)
+        mRefUserMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
+        mListListeners.add(mMessagesListener)
+
+        mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (mIsScrolling && dy < 0) {
+                    updateData()
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    mIsScrolling = true
+                }
+            }
+        })
+    }
+
+    private fun updateData() {
+        mSmoothScrollToPosition = false
+        mIsScrolling = false
+        mCountMessages += 10
+        mRefUserMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
+        mListListeners.add(mMessagesListener)
     }
 
 
@@ -75,6 +105,7 @@ class SingleChatFragment(private val contact: CommonModel) :
 
     private fun initSendButtonListener() {
         chat_ic_send.setOnClickListener {
+            mSmoothScrollToPosition = true
             val message = chat_edit_message.text.toString()
             sendMessage(
                 message,
@@ -103,7 +134,9 @@ class SingleChatFragment(private val contact: CommonModel) :
         super.onPause()
         mChatToolbar.visibility = View.GONE
         mRefReceivingUser.removeEventListener(mListenerChatToolbar)
-        mRefUserMessages.removeEventListener(mMessagesListener)
-    }
+        mListListeners.forEach {
+        mRefUserMessages.removeEventListener(it)
 
+        }
+    }
 }
