@@ -25,7 +25,7 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
         )
     }
 
-    @Suppress("UNREACHABLE_CODE")
+
     private fun verifyCode() {
         val code = register_edit_input_code.text.toString()
         val credential = PhoneAuthProvider.getCredential(id, code)
@@ -33,29 +33,7 @@ class EnterCodeFragment(val mPhoneNumber: String, val id: String) :
             if (task.isSuccessful) {
                 /**Вынести повторяющийся код из EnterPhoneNumber*/
                 Log.d(TAG, "EnterCodeFragment - verifyCode()")
-                val uid = AUTH.uid.toString()
-                val authDataMap = mutableMapOf<String, Any>(
-                    Pair(CHILD_ID, uid),
-                    Pair(CHILD_PHONE, mPhoneNumber),
-                    Pair(CHILD_USERNAME, uid)
-                )
-                REF_DATABASE_ROOT.child(
-                    NODE_PHONES
-                ).child(mPhoneNumber).setValue(uid)
-                    .addOnFailureListener { showToast(it.message.toString()) }
-                    .addOnSuccessListener {
-                        REF_DATABASE_ROOT.child(
-                            NODE_USERS
-                        ).child(uid).updateChildren(authDataMap)
-                            .addOnSuccessListener {
-                                showToast("verifyCode - passed")
-                                restartActivity()
-                            }
-                            .addOnFailureListener { showToast(it.message.toString()) }
-
-                    }
-                showToast("EnterCodeFragment - verifyCode()")
-
+                login(mPhoneNumber)
             } else showToast(task.exception?.message.toString())
         }
     }

@@ -14,6 +14,7 @@ import ua.maclaren99.macogram.models.CommonModel
 import ua.maclaren99.macogram.models.UserModel
 import ua.maclaren99.macogram.util.APP_ACTIVITY
 import ua.maclaren99.macogram.util.AppValueEventListener
+import ua.maclaren99.macogram.util.TYPE_MEDIA
 import ua.maclaren99.macogram.util.showToast
 
 const val TAG = "DBHelper"
@@ -24,8 +25,6 @@ lateinit var REF_DATABASE_ROOT: DatabaseReference
 lateinit var REF_STORAGE_ROOT: StorageReference
 lateinit var USER: UserModel
 
-const val TYPE_TEXT = "text"
-
 const val NODE_USERS = "users"
 const val NODE_MESSAGES = "messages"
 const val NODE_USERNAMES = "usernames"
@@ -34,6 +33,7 @@ const val NODE_PHONE_CONTACTS = "phone_contacts"
 
 
 const val PROFILE_IMAGE_FOLDER = "profile_image"
+const val CHAT_MEDIA_FOLDAER = "chat_media"
 
 const val CHILD_ID = "id"
 const val CHILD_PHONE = "phone"
@@ -43,6 +43,7 @@ const val CHILD_BIO = "bio"
 const val CHILD_PHOTO_URL = "photoUrl"
 const val CHILD_STATUS = "status"
 const val CHILD_TEXT = "text"
+const val CHILD_MEDIA_URL = "mediaUrl"
 const val CHILD_FROM = "from"
 const val CHILD_TYPE = "type"
 const val CHILD_TIMESTAMP = "timeStamp"
@@ -54,7 +55,7 @@ fun initFirebase() {
     REF_STORAGE_ROOT = FirebaseStorage.getInstance().reference
     USER = UserModel()
     UID = AUTH.currentUser?.uid.toString()
-    Log.d("DBHelper","UID: $UID, AUTH: $AUTH")
+    Log.d("DBHelper", "UID: $UID, AUTH: $AUTH")
 }
 
 inline fun putUrlToDatabase(url: String, crossinline function: (url: String) -> Unit) {
@@ -151,6 +152,7 @@ fun DataSnapshot.getCommonModel(): CommonModel =
 fun DataSnapshot.getuserModel(): UserModel =
     this.getValue(UserModel::class.java) ?: UserModel()
 
+/** */
 fun sendMessage(
     message: String,
     receivingUserID: String,
@@ -163,10 +165,10 @@ fun sendMessage(
     var messageKey = REF_DATABASE_ROOT.child(refDialogUser).push().key
 
     val messageMap = hashMapOf<String, Any>()
-    messageMap[CHILD_FROM] =
-        UID
+    messageMap[CHILD_FROM] = UID
     messageMap[CHILD_TEXT] = message
     messageMap[CHILD_TYPE] = typeText
+    messageMap[CHILD_ID] = messageKey.toString()
     messageMap[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
 
     val mapDialog = hashMapOf<String, Any>()
@@ -227,4 +229,31 @@ fun setFullname(fullname: String) {
             APP_ACTIVITY.mAppDrawer.updateHeader()
             APP_ACTIVITY.supportFragmentManager.popBackStack()
         }
+}
+
+
+fun sendMediaMessage(
+    receivingUserID: String,
+    mediaUrl: String,
+    messageKey: String
+//    onSendedFunction: () -> Unit
+) {
+
+    var refDialogUser = "$NODE_MESSAGES/$UID/$receivingUserID"
+    var refDialogReceivingUser = "$NODE_MESSAGES/$receivingUserID/$UID"
+
+    val messageMap = hashMapOf<String, Any>()
+    messageMap[CHILD_FROM] = UID
+    messageMap[CHILD_MEDIA_URL] = mediaUrl
+    messageMap[CHILD_TYPE] = TYPE_MEDIA
+    messageMap[CHILD_ID] = messageKey
+    messageMap[CHILD_TIMESTAMP] = ServerValue.TIMESTAMP
+
+    val mapDialog = hashMapOf<String, Any>()
+    mapDialog["$refDialogUser/$messageKey"] = messageMap
+    mapDialog["$refDialogReceivingUser/$messageKey"] = messageMap
+    REF_DATABASE_ROOT.updateChildren(mapDialog)
+//        .addOnSuccessListener { onSendedFunction() }
+        .addOnFailureListener { showToast(it.message.toString()) }
+
 }

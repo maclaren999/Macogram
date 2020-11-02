@@ -1,14 +1,18 @@
 package ua.maclaren99.macogram.ui.fragments.single_chat
 
+import android.app.Activity
+import android.content.Intent
 import android.view.View
 import android.widget.AbsListView
 import androidx.core.widget.doAfterTextChanged
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.ChildEventListener
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.database.DatabaseReference
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import kotlinx.android.synthetic.main.fragment_single_chat.*
 import kotlinx.android.synthetic.main.toolbar_chat.view.*
 import ua.maclaren99.macogram.R
@@ -29,10 +33,11 @@ class SingleChatFragment(private val contact: CommonModel) :
     private lateinit var mRefUserMessages: DatabaseReference
     private lateinit var mMessagesListener: AppChildEventListener
     private lateinit var mAdapter: SingleChatAdapter
-    private var mCountMessages = 10
+    private lateinit var mSwipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var mLayoutManager: LinearLayoutManager
+    private var mCountMessages = 15
     private var mIsScrolling: Boolean = false
     private var mSmoothScrollToPosition = true
-    private var mListListeners = mutableListOf<AppChildEventListener>()
     private var mListMessages = mutableListOf<CommonModel>()
 
 
@@ -40,30 +45,52 @@ class SingleChatFragment(private val contact: CommonModel) :
 
     override fun onResume() {
         super.onResume()
-        initLiveupdatingToolbar()
+        initLields()
+        initUpdatingToolbar()
         initSendButtonListener()
+        initAttachFileButtonListener()
         initRecyclerView()
     }
 
+    private fun initLields() {
+        mSwipeRefreshLayout = single_chat_swipe_refresh
+        mLayoutManager = LinearLayoutManager(this.context)
+    }
+
+
+
+    /** Initializes Recycler View, Adapter, sets updating events and listeners.*/
     private fun initRecyclerView() {
         mRecyclerView = chat_recycler_view
         mAdapter = SingleChatAdapter()
         mRefUserMessages = REF_DATABASE_ROOT
             .child(NODE_MESSAGES).child(UID).child(contact.id)
         mRecyclerView.adapter = mAdapter
+        mRecyclerView.setHasFixedSize(true)
+        mRecyclerView.isNestedScrollingEnabled = false
+        mRecyclerView.layoutManager = mLayoutManager
 
+        //Listener
         mMessagesListener = AppChildEventListener {
-            mAdapter.addItem(it.getCommonModel())
-            if (mSmoothScrollToPosition) mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
+            val message = it.getCommonModel()
+
+            if (mSmoothScrollToPosition) {
+                mAdapter.addItemToBootom(message) {
+                    mRecyclerView.smoothScrollToPosition(mAdapter.itemCount)
+                }
+            } else {
+                mAdapter.addItemToTop(message) {
+                    mSwipeRefreshLayout.isRefreshing = false
+                }
+            }
         }
 
         mRefUserMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
-        mListListeners.add(mMessagesListener)
 
         mRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                if (mIsScrolling && dy < 0) {
+                if (mIsScrolling && dy < 0 && mLayoutManager.findFirstVisibleItemPosition() <= 5) {
                     updateData()
                 }
             }
@@ -75,18 +102,20 @@ class SingleChatFragment(private val contact: CommonModel) :
                 }
             }
         })
+
+        mSwipeRefreshLayout.setOnRefreshListener { updateData() }
     }
 
     private fun updateData() {
         mSmoothScrollToPosition = false
         mIsScrolling = false
         mCountMessages += 10
+        mRefUserMessages.removeEventListener(mMessagesListener)
         mRefUserMessages.limitToLast(mCountMessages).addChildEventListener(mMessagesListener)
-        mListListeners.add(mMessagesListener)
     }
 
 
-    private fun initLiveupdatingToolbar() {
+    private fun initUpdatingToolbar() {
         //Init toolbar
         mChatToolbar = APP_ACTIVITY.mToolbar.toolbar_chat
         mChatToolbar.visibility = View.VISIBLE
@@ -116,8 +145,13 @@ class SingleChatFragment(private val contact: CommonModel) :
             }
         }
         val textNotBlankWatcher = chat_edit_message.doAfterTextChanged { editable ->
-            if (!editable.toString().isBlank()) chat_ic_send.visibility = View.VISIBLE
-            else chat_ic_send.visibility = View.GONE
+            if (!editable.toString().isBlank()) {
+                chat_ic_send.visibility = View.VISIBLE
+                chat_ic_attach_file.visibility = View.GONE
+            } else {
+                chat_ic_attach_file.visibility = View.VISIBLE
+                chat_ic_send.visibility = View.GONE
+            }
         }
     }
 
@@ -134,9 +168,35 @@ class SingleChatFragment(private val contact: CommonModel) :
         super.onPause()
         mChatToolbar.visibility = View.GONE
         mRefReceivingUser.removeEventListener(mListenerChatToolbar)
-        mListListeners.forEach {
-        mRefUserMessages.removeEventListener(it)
+        mRefUserMessages.removeEventListener(mMessagesListener)
+
+    }
+
+    //TODO: Change library for getting media. CropImage don't pass.
+    private fun initAttachFileButtonListener() {
+        chat_ic_attach_file.setOnClickListener {
+            CropImage.activity()
+                .setAspectRatio(1, 1)
+                .setRequestedSize(600, 600)
+                .start(APP_ACTIVITY, this)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val uri = CropImage.getActivityResult(data).uri     //getting path of croped image
+            val messageKey = REF_DATABASE_ROOT.child(NODE_MESSAGES).child(UID).child(contact.id)
+                .push().key.toString()
+            val path = REF_STORAGE_ROOT.child(CHAT_MEDIA_FOLDAER).child(messageKey)
+
+            uploadImageToStorage(uri, path) {
+                getItemUrlFromStoarage(path) { url ->
+                    sendMediaMessage(contact.id, url, messageKey)
+                }
+            }
 
         }
     }
+
 }

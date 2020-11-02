@@ -99,7 +99,7 @@ fun ImageView.downloadAndSetImage(url: String){
         .into(this)
 }
 
-fun String.toTime(): String {
+fun String.asTime(): String {
     val time = Date(this.toLong())
     val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
     return timeFormat.format(time)

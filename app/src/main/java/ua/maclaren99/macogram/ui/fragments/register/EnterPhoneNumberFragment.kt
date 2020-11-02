@@ -22,28 +22,39 @@ class EnterPhoneNumberFragment : Fragment(R.layout.fragment_enter_phone_number) 
 
         mCallback = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-                AUTH.signInWithCredential(credential).addOnCompleteListener{
-                    if(it.isSuccessful){
+                AUTH.signInWithCredential(credential).addOnCompleteListener {
+                    if (it.isSuccessful) {
                         showToast("Welcome")
-                        restartActivity()
+                        login(mPhoneNumber)
+//                        restartActivity()
 //qwe       Вынести
-                        Log.d(TAG, "EnterPhoneNumberFragment - verifyCode()")
-                        val uid = AUTH.uid.toString()
-                        val authDataMap = mutableMapOf<String, Any>(
-                            Pair(CHILD_ID, uid),
-                            Pair(CHILD_PHONE, mPhoneNumber),
-                            Pair(CHILD_USERNAME, uid)
-                        )
-                        REF_DATABASE_ROOT.child(
-                            NODE_USERS
-                        ).child(uid).updateChildren(authDataMap)
-                            .addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    showToast("verifyCode - passed")
-                                    restartActivity()
-                                } else showToast(it.exception?.message.toString())
-                            }
-                        showToast("EnterCodeFragment - verifyCode()")
+//                        Log.d(TAG, "EnterPhoneNumberFragment - verifyCode()")
+//                        val uid = AUTH.uid.toString()
+//                        val authDataMap = mutableMapOf<String, Any>(
+//                            Pair(CHILD_ID, uid),
+//                            Pair(CHILD_PHONE, mPhoneNumber)
+//                        )
+//                        REF_DATABASE_ROOT.child(NODE_USERS).child(UID)
+//                            .addListenerForSingleValueEvent(AppValueEventListener {
+//                                if (!it.hasChild(CHILD_USERNAME)) authDataMap[CHILD_USERNAME] = uid
+//
+//                                REF_DATABASE_ROOT.child(
+//                                    NODE_PHONES
+//                                ).child(mPhoneNumber).setValue(uid)
+//                                    .addOnFailureListener { showToast(it.message.toString()) }
+//                                    .addOnSuccessListener {
+//                                        REF_DATABASE_ROOT.child(
+//                                            NODE_USERS
+//                                        ).child(uid).updateChildren(authDataMap)
+//                                            .addOnSuccessListener {
+//                                                showToast("verifyCode - passed")
+//                                                restartActivity()
+//                                            }
+//                                            .addOnFailureListener { showToast(it.message.toString()) }
+//
+//                                    }
+//                                showToast("EnterCodeFragment - verifyCode()")
+//                            })
 //qwe
 
 

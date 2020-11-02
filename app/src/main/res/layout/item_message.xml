@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
+        android:padding="@dimen/little_vertical_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,10 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/small_horizontal_margin"
             android:background="@drawable/bg_my_message"
-
-            android:paddingStart="20dp"
-            android:paddingEnd="@dimen/small_horizontal_margin"
-            android:paddingBottom="@dimen/little_vertical_margin"
+            android:padding="@dimen/little_vertical_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -39,9 +37,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/little_vertical_margin"
                 android:textColor="@color/colorBlack"
-
                 android:textSize="@dimen/normalText"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,6 +56,40 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/user_image_layout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/small_horizontal_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/user_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                />
+            <TextView
+                android:id="@+id/user_image_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="#8A757575"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/tinyText"
+                app:layout_constraintTop_toBottomOf="@id/user_image"
+                app:layout_constraintBottom_toBottomOf="@+id/user_image"
+                app:layout_constraintEnd_toEndOf="@id/user_image"
+                tools:text="00:00" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -68,6 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="100dp"
+        android:padding="@dimen/little_vertical_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -78,16 +109,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small_horizontal_margin"
             android:background="@drawable/bg_received_message"
-
-            android:paddingStart="@dimen/small_horizontal_margin"
-            android:paddingEnd="@dimen/small_horizontal_margin"
-            android:paddingBottom="@dimen/little_vertical_margin"
+            android:padding="@dimen/little_vertical_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
-
 
             <TextView
                 android:id="@+id/received_message_text"
@@ -97,7 +124,6 @@
                 android:textColor="@color/colorBlack"
 
                 android:textSize="@dimen/normalText"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -116,6 +142,37 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/received_image_layout"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/small_horizontal_margin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            >
+
+            <ImageView
+                android:id="@+id/received_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+            <TextView
+                android:id="@+id/received_image_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPaleGrey"
+                android:textSize="@dimen/tinyText"
+                app:layout_constraintBottom_toBottomOf="@+id/received_image"
+                app:layout_constraintEnd_toEndOf="@id/received_image"
+                app:layout_constraintTop_toBottomOf="@id/received_image"
+                tools:text="00:00" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
